@@ -1,0 +1,9 @@
+.home-hero-bg {
+  background-image: url('./heroImage.png');
+  background-size: cover;
+  background-position: center;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
