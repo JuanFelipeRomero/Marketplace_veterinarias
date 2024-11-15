@@ -5,6 +5,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 dotenv.config();
 
@@ -115,6 +116,72 @@ app.post('/register/user', async (req, res) => {
     }
 
     res.status(500).json({ message: 'Error al registrar usuario y mascota' });
+  }
+});
+
+// Ruta para iniciar sesion ***********************************************************
+app.post('/login', async (req, res) => {
+  const { email, contrasena } = req.body;
+  console.log('Datos recibidos en el backend:', req.body);
+
+  try {
+    // Asegúrate de que los valores recibidos no sean undefined
+    console.log('Correo recibido:', email);
+    console.log('Contraseña recibida:', contrasena);
+
+    // Buscar usuario por el email, utilizando "$1" para parametrizar la consulta
+    const usuarioQuery = 'SELECT * FROM "USUARIOS" WHERE correo = $1';
+    const usuarioResult = await pool.query(usuarioQuery, [email]);
+
+    if (usuarioResult.rows.length === 0) {
+      return res.status(400).send('Correo o contraseña incorrectos');
+    }
+
+    // Información del usuario obtenida
+    const usuario = usuarioResult.rows[0];
+
+    // Asegúrate de que el hash de la contraseña no sea undefined
+    console.log('Contraseña hasheada en la base de datos:', usuario.contrasena);
+
+    if (!usuario.contrasena) {
+      return res
+        .status(500)
+        .send('Contraseña no encontrada en la base de datos');
+    }
+
+    // Verificar la contraseña ingresada por el usuario
+    const contrasenaValida = await bcrypt.compare(
+      contrasena,
+      usuario.contrasena
+    );
+
+    if (!contrasenaValida) {
+      return res.status(400).send('Correo o contraseña incorrectos');
+    }
+
+    // Generar el token JWT si las credenciales son válidas
+    const token = jwt.sign(
+      {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+      },
+      process.env.JWT_SECRET, // La clave secreta para firmar el token
+      { expiresIn: '1h' } // Nota: corregido `expires` a `expiresIn`
+    );
+
+    // Enviar el token y algunos datos básicos del usuario
+    res.json({
+      token,
+      user: {
+        id: usuario.id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+      },
+    });
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error);
+    res.status(500).send('Error en el servidor al intentar iniciar sesión');
   }
 });
 
