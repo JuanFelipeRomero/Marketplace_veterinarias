@@ -1,40 +1,61 @@
-import { Provider } from '@/components/ui/provider';
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import './index.css';
-import { Theme } from '@chakra-ui/react';
+import { Provider } from '@/components/ui/provider'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import './index.css'
+import { Theme } from '@chakra-ui/react'
 
 //Importacion de paginas / componentes
-import HomePage from './pages/HomePage.jsx';
-import WelcomeRegister  from './pages/WelcomeRegister.jsx';
-import UserRegister from './pages/UserRegister.jsx';
-import PetRegister from './pages/PetRegister.jsx';
-import UserLogin from './pages/UserLogin.jsx';
+import HomePage from './pages/HomePage.jsx'
+import WelcomeRegister from './pages/WelcomeRegister.jsx'
+import UserRegister from './pages/UserRegister.jsx'
+import PetRegister from './pages/PetRegister.jsx'
+import UserLogin from './pages/UserLogin.jsx'
+import BuscarClinica from './pages/BuscarClinica.jsx'
+import LayoutDuenoMascota from './pages/LayoutDuenoMascota.jsx'
+import DetallesClinica from './pages/DetallesClinica.jsx'
 
 const router = createBrowserRouter([
   //Home page
   {
     path: '/',
-    element: <HomePage />,
+    element: <HomePage />
   },
   {
     path: '/registerwelcome',
-    element: <WelcomeRegister />,
+    element: <WelcomeRegister />
   },
   {
     path: '/registeruser',
-    element: <UserRegister />,
+    element: <UserRegister />
   },
   {
     path: '/petregister',
-    element: <PetRegister />,
+    element: <PetRegister />
   },
   {
     path: '/login',
-    element: <UserLogin/>,
+    element: <UserLogin />
   },
-]);
+  {
+    path: '/home-page-Dueno',
+    element: <LayoutDuenoMascota />,
+    children: [
+      {
+        index: true,
+        element: <BuscarClinica />
+      },
+      {
+        path: '/buscar-clinica',
+        element: <BuscarClinica />
+      },
+      {
+        path: '/detalles-clinica',
+        element: <DetallesClinica />
+      }
+    ]
+  }
+])
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -44,4 +65,4 @@ createRoot(document.getElementById('root')).render(
       </Theme>
     </Provider>
   </StrictMode>
-);
+)

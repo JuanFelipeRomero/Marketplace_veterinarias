@@ -1,7 +1,7 @@
-import { TopBar } from '../ownComponents/TopBar';
-import { Input } from '@chakra-ui/react';
+import { TopBar } from '../ownComponents/TopBar'
+import { Input } from '@chakra-ui/react'
 
-import '../App.css';
+import '../App.css'
 
 export default function HomePage() {
   return (
@@ -26,5 +26,5 @@ export default function HomePage() {
         </section>
       </main>
     </>
-  );
+  )
 }
