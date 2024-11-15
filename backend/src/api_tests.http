@@ -1,0 +1,13 @@
+POST http://localhost:3000/register/user
+Content-Type: application/json
+
+{
+   "nombre": "QueRica Monda",
+   "email": "monda@gmail.com",
+   "telefono": "3211234567",
+   "contrasena": "123456",
+   "nombremascota": "Lemondiu",
+   "edad": "5",
+   "especie": "felino",
+   "raza": "criollo"
+}
