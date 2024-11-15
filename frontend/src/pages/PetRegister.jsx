@@ -1,69 +1,140 @@
 import { useNavigate } from 'react-router-dom';
-import { Card, Stack, Input } from '@chakra-ui/react';
-import { Field } from '../components/ui/field';
-import { Button } from '../components/ui/button';
-import { Link } from 'react-router-dom';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Box, Button, Input, Stack, Heading } from '@chakra-ui/react';
+import { Field } from '../components/ui/field'; // Asegúrate de tener un componente `Field` reutilizable
 import { ReturnBtn } from '../ownComponents/ReturnBtn';
 
-export default function UserRegister() {
+// Schema del formulario para el registro de mascota
+const petSchema = z.object({
+  nombre: z.string().min(1, 'El nombre de la mascota es obligatorio'),
+  edad: z.string().min(1, 'La edad es obligatoria'),
+  especie: z.string().min(1, 'La especie es obligatoria'),
+  raza: z.string().min(1, 'La raza es obligatoria'),
+});
+
+export default function PetRegister() {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(petSchema),
+    defaultValues: {
+      nombremascota: '',
+      edad: '',
+      especie: '',
+      raza: '',
+    },
+  });
+
+  const onSubmit = (data) => {
+    console.log('Datos de la mascota enviados: ', data);
+
+    //Recuperar informacion personal
+    const personalInfo = JSON.parse(localStorage.getItem('personalInfo'));
+
+    const fullData = {
+      nombre: personalInfo.nombre,
+      email: personalInfo.email,
+      telefono: personalInfo.telefono,
+      contrasena: personalInfo.contrasena,
+      nombremascota: data.nombremascota,
+      edad: data.edad,
+      especie: data.especie,
+      raza: data.raza,
+    };
+
+    console.log('Full info: ' + fullData);
+
+    // Navegar a la siguiente página o acción
+    navigate('/');
   };
 
   return (
-    <>
-      <main className="h-screen w-full flex login-bg">
-        <ReturnBtn />
-        <section className="w-1/2 flex justify-center flex-col items-center bg-white p-8">
-          <h2 className="md:text-[30px] text-black font-semibold text-center mb-6">
+    <main className="h-screen w-full flex login-bg">
+      <ReturnBtn />
+      <section className="w-1/2 flex justify-center items-center p-8">
+        <Box
+          width="100%"
+          maxWidth="400px"
+          p={8}
+          boxShadow="lg"
+          borderRadius="md"
+          bg="white"
+        >
+          <Heading as="h2" size="lg" textAlign="center" mb={6}>
             Registra los datos de tu mascota
-          </h2>
-          <Card.Root
-            maxW="lg"
-            bg="white"
-            width="454px"
-            shadow="0px 10px 15px -3px rgba(0, 0, 0, 0.10), 0px 4px 6px -2px rgba(0, 0, 0, 0.05)"
-          >
-            <Card.Body>
-              <Stack gap="16px" w="full">
-                <Field label="Nombre" color="black">
-                  <Input
-                    placeholder="Nombre"
-                    _placeholder={{ fontSize: 'sm' }}
-                  />
-                </Field>
-                <Field label="Edad" color="black">
-                  <Input placeholder="Edad" _placeholder={{ fontSize: 'sm' }} />
-                </Field>
-                <Field label="Especie" color="black">
-                  <Input
-                    placeholder="Especie"
-                    _placeholder={{ fontSize: 'sm' }}
-                  />
-                </Field>
-                <Field label="Raza" color="black">
-                  <Input placeholder="Raza" _placeholder={{ fontSize: 'sm' }} />
-                </Field>
-              </Stack>
-            </Card.Body>
-          </Card.Root>
-          <div className="mt-10">
-            <Button
-              onClick={handleClick}
-              size="sm"
-              variant="solid"
-              bg="#38A169"
-              px="20"
-              py="1"
-            >
-              Continuar
-            </Button>
-          </div>
-        </section>
-        <section className="w-1/2 flex justify-center flex-col items-center registeruser-bg"></section>
-      </main>
-    </>
+          </Heading>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Stack gap={4} align="flex-start" maxW="sm">
+              <Field
+                label="Nombre de tu mascota"
+                invalid={!!errors.nombremascota}
+                errorText={errors.nombremascota?.message}
+              >
+                <Input
+                  {...register('nombremascota', {
+                    required: 'El nombre de la mascota es obligatorio',
+                  })}
+                  placeholder="Nombre"
+                />
+              </Field>
+
+              <Field
+                label="Edad"
+                invalid={!!errors.edad}
+                errorText={errors.edad?.message}
+              >
+                <Input
+                  {...register('edad', { required: 'La edad es obligatoria' })}
+                  placeholder="Edad"
+                />
+              </Field>
+
+              <Field
+                label="Especie"
+                invalid={!!errors.especie}
+                errorText={errors.especie?.message}
+              >
+                <Input
+                  {...register('especie', {
+                    required: 'La especie es obligatoria',
+                  })}
+                  placeholder="Canino"
+                />
+              </Field>
+
+              <Field
+                label="Raza"
+                invalid={!!errors.raza}
+                errorText={errors.raza?.message}
+              >
+                <Input
+                  {...register('raza', { required: 'La raza es obligatoria' })}
+                  placeholder="Raza"
+                />
+              </Field>
+
+              <Button
+                className="mx-auto block text-white"
+                type="submit"
+                size="sm"
+                variant="solid"
+                bg="#38A169"
+                px="20"
+                py="1"
+              >
+                Continuar
+              </Button>
+            </Stack>
+          </form>
+        </Box>
+      </section>
+      <section className="w-1/2 flex justify-center flex-col items-center registeruser-bg"></section>
+    </main>
   );
 }
