@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -8,7 +9,7 @@ import { ReturnBtn } from '../ownComponents/ReturnBtn';
 
 // Schema del formulario para el registro de mascota
 const petSchema = z.object({
-  nombre: z.string().min(1, 'El nombre de la mascota es obligatorio'),
+  nombremascota: z.string().min(1, 'El nombre de la mascota es obligatorio'),
   edad: z.string().min(1, 'La edad es obligatoria'),
   especie: z.string().min(1, 'La especie es obligatoria'),
   raza: z.string().min(1, 'La raza es obligatoria'),
@@ -53,6 +54,7 @@ export default function PetRegister() {
     };
 
     console.log('Full info: ' + fullData);
+    console.log(apiUrl);
 
     //fetching
     try {
@@ -68,7 +70,7 @@ export default function PetRegister() {
       if (response.ok) {
         console.log('Registro exitoso');
         // Navegar a la siguiente página o acción
-        navigate('/');
+        navigate('/login');
       } else {
         console.error('Error en el registro:', response.statusText);
         setFecthError(true);
