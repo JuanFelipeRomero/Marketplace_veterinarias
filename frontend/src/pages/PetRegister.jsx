@@ -14,7 +14,11 @@ const petSchema = z.object({
   raza: z.string().min(1, 'La raza es obligatoria'),
 });
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 export default function PetRegister() {
+  const [fetchError, setFecthError] = useState(null);
+
   const navigate = useNavigate();
 
   const {
@@ -31,7 +35,7 @@ export default function PetRegister() {
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log('Datos de la mascota enviados: ', data);
 
     //Recuperar informacion personal
@@ -50,8 +54,28 @@ export default function PetRegister() {
 
     console.log('Full info: ' + fullData);
 
-    // Navegar a la siguiente página o acción
-    navigate('/');
+    //fetching
+    try {
+      // Hacer la solicitud POST al servidor con los datos combinados
+      const response = await fetch(`${apiUrl}/register/user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(fullData),
+      });
+
+      if (response.ok) {
+        console.log('Registro exitoso');
+        // Navegar a la siguiente página o acción
+        navigate('/');
+      } else {
+        console.error('Error en el registro:', response.statusText);
+        setFecthError(true);
+      }
+    } catch (error) {
+      console.error('Error al hacer la solicitud:', error);
+    }
   };
 
   return (
