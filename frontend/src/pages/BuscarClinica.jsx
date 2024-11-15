@@ -99,7 +99,7 @@ export default function BuscarClinica() {
             alignSelf="center"
             ml="4"
             className="bg-gray-200 text-black py-2 px-4 rounded-md"
-            onClick={() => navigate('/detalles-clinica')}
+            onClick={() => navigate('/home-page-Dueno/detalles-clinica')}
           >
             Ver detalles
           </Button>

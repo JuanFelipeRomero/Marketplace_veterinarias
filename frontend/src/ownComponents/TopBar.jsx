@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import useAuthStore from '../stores/useAuthStore'
 
 export function TopBar() {
@@ -8,7 +8,7 @@ export function TopBar() {
   return (
     <>
       <div className="flex justify-between bg-white h-24 items-center px-20">
-        <p className="font-lexend w-1/6 text-2xl font-medium">
+        <p className="font-lexend w-2/6 text-2xl font-medium">
           LETY MARKETPLACE
         </p>
         {isAuthenticated ? (

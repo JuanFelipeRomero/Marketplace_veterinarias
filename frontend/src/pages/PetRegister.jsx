@@ -1,46 +1,46 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Box, Button, Input, Stack, Heading } from '@chakra-ui/react';
-import { Field } from '../components/ui/field'; // Asegúrate de tener un componente `Field` reutilizable
-import { ReturnBtn } from '../ownComponents/ReturnBtn';
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Box, Button, Input, Stack, Heading } from '@chakra-ui/react'
+import { Field } from '../components/ui/field' // Asegúrate de tener un componente `Field` reutilizable
+import { ReturnBtn } from '../ownComponents/ReturnBtn'
 
 // Schema del formulario para el registro de mascota
 const petSchema = z.object({
   nombremascota: z.string().min(1, 'El nombre de la mascota es obligatorio'),
   edad: z.string().min(1, 'La edad es obligatoria'),
   especie: z.string().min(1, 'La especie es obligatoria'),
-  raza: z.string().min(1, 'La raza es obligatoria'),
-});
+  raza: z.string().min(1, 'La raza es obligatoria')
+})
 
-const apiUrl = import.meta.env.VITE_API_URL;
+const apiUrl = import.meta.env.VITE_API_URL
 
 export default function PetRegister() {
-  const [fetchError, setFecthError] = useState(null);
+  const [fetchError, setFecthError] = useState(null)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm({
     resolver: zodResolver(petSchema),
     defaultValues: {
       nombremascota: '',
       edad: '',
       especie: '',
-      raza: '',
-    },
-  });
+      raza: ''
+    }
+  })
 
   const onSubmit = async (data) => {
-    console.log('Datos de la mascota enviados: ', data);
+    console.log('Datos de la mascota enviados: ', data)
 
     //Recuperar informacion personal
-    const personalInfo = JSON.parse(localStorage.getItem('personalInfo'));
+    const personalInfo = JSON.parse(localStorage.getItem('personalInfo'))
 
     const fullData = {
       nombre: personalInfo.nombre,
@@ -50,35 +50,35 @@ export default function PetRegister() {
       nombremascota: data.nombremascota,
       edad: data.edad,
       especie: data.especie,
-      raza: data.raza,
-    };
+      raza: data.raza
+    }
 
-    console.log('Full info: ' + fullData);
-    console.log(apiUrl);
+    console.log('Full info: ' + fullData)
+    console.log(apiUrl)
 
     //fetching
     try {
       // Hacer la solicitud POST al servidor con los datos combinados
-      const response = await fetch(`${apiUrl}/register/user`, {
+      const response = await fetch(`${apiUrl}register/user`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(fullData),
-      });
+        body: JSON.stringify(fullData)
+      })
 
       if (response.ok) {
-        console.log('Registro exitoso');
+        console.log('Registro exitoso')
         // Navegar a la siguiente página o acción
-        navigate('/login');
+        navigate('/login')
       } else {
-        console.error('Error en el registro:', response.statusText);
-        setFecthError(true);
+        console.error('Error en el registro:', response.statusText)
+        setFecthError(true)
       }
     } catch (error) {
-      console.error('Error al hacer la solicitud:', error);
+      console.error('Error al hacer la solicitud:', error)
     }
-  };
+  }
 
   return (
     <main className="h-screen w-full flex login-bg">
@@ -104,7 +104,7 @@ export default function PetRegister() {
               >
                 <Input
                   {...register('nombremascota', {
-                    required: 'El nombre de la mascota es obligatorio',
+                    required: 'El nombre de la mascota es obligatorio'
                   })}
                   placeholder="Nombre"
                 />
@@ -128,7 +128,7 @@ export default function PetRegister() {
               >
                 <Input
                   {...register('especie', {
-                    required: 'La especie es obligatoria',
+                    required: 'La especie es obligatoria'
                   })}
                   placeholder="Canino"
                 />
@@ -162,5 +162,5 @@ export default function PetRegister() {
       </section>
       <section className="w-1/2 flex justify-center flex-col items-center registeruser-bg"></section>
     </main>
-  );
+  )
 }
