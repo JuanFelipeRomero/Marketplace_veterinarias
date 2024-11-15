@@ -11,6 +11,9 @@ import WelcomeRegister from './pages/WelcomeRegister.jsx'
 import UserRegister from './pages/UserRegister.jsx'
 import PetRegister from './pages/PetRegister.jsx'
 import UserLogin from './pages/UserLogin.jsx'
+import BuscarClinica from './pages/BuscarClinica.jsx'
+import LayoutDuenoMascota from './pages/LayoutDuenoMascota.jsx'
+import DetallesClinica from './pages/DetallesClinica.jsx'
 
 const router = createBrowserRouter([
   //Home page
@@ -33,6 +36,24 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <UserLogin />
+  },
+  {
+    path: '/home-page-Dueno',
+    element: <LayoutDuenoMascota />,
+    children: [
+      {
+        index: true,
+        element: <BuscarClinica />
+      },
+      {
+        path: '/buscar-clinica',
+        element: <BuscarClinica />
+      },
+      {
+        path: '/detalles-clinica',
+        element: <DetallesClinica />
+      }
+    ]
   }
 ])
 

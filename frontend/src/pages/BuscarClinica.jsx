@@ -1,6 +1,7 @@
 import { Box, Flex, Text, Image, Badge, Button } from '@chakra-ui/react'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 import VeterinariaImage from './veterinaria_image.jpg'
+import { useNavigate } from 'react-router-dom'
 
 const containerStyle = {
   width: '100%',
@@ -13,6 +14,7 @@ const center = {
 }
 
 export default function BuscarClinica() {
+  const navigate = useNavigate()
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: 'AIzaSyC8YAu71LLUy6GUqpOhrnzg2HhrDL2bcEc'
   })
@@ -36,9 +38,7 @@ export default function BuscarClinica() {
             mapContainerStyle={containerStyle}
             center={center}
             zoom={12}
-          >
-            {/* Aquí puedes añadir marcadores u otros elementos */}
-          </GoogleMap>
+          ></GoogleMap>
         ) : (
           <Text color="gray.800">Cargando mapa...</Text>
         )}
@@ -99,6 +99,7 @@ export default function BuscarClinica() {
             alignSelf="center"
             ml="4"
             className="bg-gray-200 text-black py-2 px-4 rounded-md"
+            onClick={() => navigate('/detalles-clinica')}
           >
             Ver detalles
           </Button>

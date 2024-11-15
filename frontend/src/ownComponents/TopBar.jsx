@@ -1,10 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom';
-import useAuthStore from '../stores/useAuthStore';
+import { Link, useNavigate } from 'react-router-dom'
+import useAuthStore from '../stores/useAuthStore'
 
 export function TopBar() {
-  const navigate = useNavigate();
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  const logout = useAuthStore((state) => state.logout);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const logout = useAuthStore((state) => state.logout)
 
   return (
     <>
@@ -19,5 +18,5 @@ export function TopBar() {
         )}
       </div>
     </>
-  );
+  )
 }
